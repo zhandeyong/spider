@@ -75,7 +75,7 @@ def get_4s(brand_id, location_id):
         # 先确定一共有几页，内容样式为<span class="disabled">共1页</span>
         num = int(soup.find_all('span', attrs={'class': 'disabled'})[0].text[1])
         for i in range(num):  # 遍历每一页取值
-            # time.sleep(random.randint(1, 3))
+            time.sleep(random.randint(1, 3))
             url_brand = 'http://seller.cheshi.com/' + location_id +'/brand_'+ str(brand_id) +'/p_' + str(i+1) + '/'
             html_brand = get_html_text(url_brand)
             soup_brand = BeautifulSoup(html_brand, 'html.parser')
@@ -106,7 +106,7 @@ if __name__ == '__main__':
     for i in range(len(df_brand)):
         bran = df_brand.loc[i]['brand']
         bran_id = df_brand.loc[i]['brand_id']
-        print('========== %s ==========' % bran)
+        print('==========%d %s ==========' % (i, bran))
         for j in range(31):  # 0-30行为所需的省份信息
             time.sleep(random.randint(1, 3))
             loc = df_location.loc[j]['location']
@@ -117,11 +117,11 @@ if __name__ == '__main__':
                 df_dealer.insert(0, 'brand', bran)
                 df_dealer.insert(1, 'province', loc)
                 df_dealers = df_dealers.append(df_dealer, ignore_index=True)
-    df_dealers.shape
-    df_dealers.head()
+    print(df_dealers.shape)
+    print(df_dealers.head())
     # 部门4s店名称中含有. 1 2需要进一步清理
     # df_dealers['dealer'] = df_dealers['dealer'].apply(lambda x: re.split('[.12]', x)[0])
     # df_dealers.drop_duplicates(subset=['brand', 'province', 'dealer'], inplace=True)
-    df_dealers.to_csv('./datasets/全国各省份汽车品牌4s店经销商.txt', index=False)
+    df_dealers.to_csv('./全国各省份汽车品牌4s店经销商名单.txt', index=False)
 
 
